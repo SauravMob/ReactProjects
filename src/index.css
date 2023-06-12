@@ -1,13 +1,75 @@
-body {
+html, body {
+  height: 100%;
+  background-color: #e2e2e2 !important;
   margin: 0;
+  padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+#root {
+  height: 100% !important;
+  background-image: url('../public/Contact.avif');
+  background-size: cover;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.loginForm {
+  background-color: rgba(245, 245, 220, 0.35);
+}
+
+.css-1wvake5 {
+  position: fixed !important;
+  width: 200px !important;
+  min-width: 200px !important;
+  height: 100%;
+}
+
+.content {
+  margin-left: 200px;
+  height: 100%;
+  padding: 15px;
+  color: aliceblue;
+}
+
+.card-body {
+  background-color: darkgrey;
+  border-radius: 10px;
+  border-color: darkgray;
+  color: aliceblue;
+}
+
+.card {
+  background-color: darkgray !important;
+  color: aliceblue;
+}
+
+.nav-item {
+  color: aliceblue;
+  margin-right: 10px;
+}
+
+.imageRow img{
+  max-height: 400px;
+  max-width: fit-content;
+}
+
+.ps-active{
+  background-color: white;
+}
+
+.ps-menu-label {
+  margin-left: 2px;
+}
+
+.ps-menu-label svg {
+  margin-bottom: 4px;
 }

@@ -1,25 +1,33 @@
-import logo from './logo.svg';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
+import Login from './components/commons/Login';
+import Signup from './components/commons/Signup';
+import Navbar from './components/commons/Navbar';
+import UserComponent from './UserComponent';
+import { useEffect, useState } from 'react';
 
 function App() {
+  const loc = useLocation()
+  const [userToggle, setUserToggle] = useState(false)
+
+  useEffect(() => {
+    if (loc.pathname.startsWith('/user/')) {
+      setUserToggle(true)
+    } else {
+      setUserToggle(false)
+    }
+  }, [loc])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <Navbar />
+      {userToggle ? <UserComponent /> : <></>}
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
+    </>
+  )
 }
 
-export default App;
+export default App

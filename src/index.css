@@ -8,13 +8,14 @@ html, body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 #root {
-  height: 100% !important;
   background-image: url('../public/Contact.avif');
   background-size: cover;
+  background-color: darkgray;
+  min-height: 665px;
 }
 
 code {

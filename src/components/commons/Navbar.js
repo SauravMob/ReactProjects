@@ -31,7 +31,7 @@ const Navbars = (args) => {
                     <NavItem>UserName</NavItem>  
                     </>: <>
                     <NavItem>
-                        <NavLink href={loc.pathname === '/signup' ? '/login' : "/signup"}>{loc.pathname === '/login' ? 'Register' : 'Login'}</NavLink>
+                        <NavLink href={loc.pathname === '/signup' ? '/login' : "/signup"}>{loc.pathname === '/signup' ? 'Login' : 'Register'}</NavLink>
                     </NavItem>
                     </>}
                 </Nav>

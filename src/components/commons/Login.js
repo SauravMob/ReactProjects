@@ -3,10 +3,10 @@ import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap'
 
 const Login = () => {
     return (
-        <Row className='h-100'>
+        <Row style={{ minHeight: '630px'}}>
             <Col></Col>
             <Col className='loginForm p-4 h-80 my-auto'>
-                <Row>
+                <Row className='my-auto'>
                     <h1 className='d-flex justify-content-center'> Login </h1>
                     <Form>
                         <FormGroup>

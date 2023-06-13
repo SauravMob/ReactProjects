@@ -5,6 +5,7 @@ import Signup from './components/commons/Signup';
 import Navbar from './components/commons/Navbar';
 import UserComponent from './UserComponent';
 import { useEffect, useState } from 'react';
+import Home from './components/commons/Home';
 
 function App() {
   const loc = useLocation()
@@ -23,6 +24,7 @@ function App() {
       <Navbar />
       {userToggle ? <UserComponent /> : <></>}
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>

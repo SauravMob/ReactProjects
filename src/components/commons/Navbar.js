@@ -24,15 +24,18 @@ const Navbars = (args) => {
         <div>
             <Navbar color="dark" dark expand="md">
                 <NavbarBrand href="/">Contact Manager</NavbarBrand>
-                <Nav className="ml-auto" navbar>
+                <Nav navbar>
                     {userToggle ? <>
-                    <NavItem>About</NavItem>  
-                    <NavItem>Logout</NavItem>  
-                    <NavItem>UserName</NavItem>  
-                    </>: <>
-                    <NavItem>
-                        <NavLink href={loc.pathname === '/signup' ? '/login' : "/signup"}>{loc.pathname === '/signup' ? 'Login' : 'Register'}</NavLink>
-                    </NavItem>
+                        <NavLink href='/about'>About</NavLink>
+                        <NavLink href='/logout'>Logout</NavLink>
+                        <NavLink>{localStorage.getItem('userId')}</NavLink>
+                    </> : <>
+                        {loc.pathname === '/' ? <>
+                            <NavLink href='/login'>Login</NavLink>
+                            <NavLink href='/signup'>Register</NavLink>
+                        </> : <>
+                            <NavLink href={loc.pathname === '/signup' ? '/login' : "/signup"}>{loc.pathname === '/signup' ? 'Login' : 'Register'}</NavLink>
+                        </>}
                     </>}
                 </Nav>
             </Navbar>

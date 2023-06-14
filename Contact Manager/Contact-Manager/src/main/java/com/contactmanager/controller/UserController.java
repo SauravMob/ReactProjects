@@ -22,6 +22,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<User> createUser(@RequestBody User user) {
+        user.setRole("USER");
         User user1 = userRepository.save(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
@@ -29,7 +30,7 @@ public class UserController {
     public ResponseEntity<String> loginUser(@RequestBody User user) {
         User user1 = userRepository.findByEmailAndPassword(user.getEmail(), user.getPassword());
         if (user1 != null) {
-            return ResponseEntity.ok("User exists");
+            return ResponseEntity.ok(user.getEmail());
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User does not exist");
         }

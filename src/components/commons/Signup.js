@@ -1,9 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap'
-import axios from 'axios'
 import { useForm } from 'react-hook-form'
+import { useDispatch, useSelector } from 'react-redux'
+import { registerUser } from './store/action'
+import { useNavigate } from "react-router-dom";
+import { regexEmail, regexPhone } from '../utility/Utils'
+import classNames from 'classnames'
 
 const Signup = () => {
+
+    const dispatch = useDispatch()
+    const store = useSelector(state => state.commonReducer)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (store.status === 201) {
+            setTimeout(() => {
+                navigate('/login')
+            }, 2000);
+        }
+    }, [store])
 
     const [input, setInput] = useState({
         "name": '',
@@ -26,6 +42,16 @@ const Signup = () => {
             "enabled": false
         }
     })
+
+    const signUpValidations = {
+        "name": { required: "Required Field" },
+        "email": { required: "Required field", pattern: { value: regexEmail, message: 'Invalid email id' } },
+        "phone": { required: "Required field", pattern: { value: regexPhone, message: 'Invalid phone number' } },
+        "password": { required: "Required field", minLength: { value: 3, message: "Password must be atleat 3 character" } },
+        "work": { required: "Required Field" },
+        "about": { required: "Required Field" },
+        "enabled": { required: "Required Field", pattern: { value: 'on', message: "Please Check the terms and conditions" } },
+    }
 
     const onInputChange = (selector, e) => {
         if (selector === 'enabled') {
@@ -52,9 +78,7 @@ const Signup = () => {
     }
 
     const onSubmit = (data) => {
-        axios.post('http://localhost:8181/register', data)
-            .then(response => console.log("Response:", response))
-            .catch(err => console.log("Error:", err))
+        dispatch(registerUser(data))
     }
 
     return (
@@ -70,11 +94,15 @@ const Signup = () => {
                             </Label>
                             <Input
                                 id="name"
+                                {...register('name', signUpValidations.name)}
+                                className={classNames(`form-control ${errors.name ? 'is-invalid' : ''}`)}
+                                aria-invalid={errors.name ? "true" : "false"}
                                 name="name"
                                 placeholder="Enter your Full Name"
                                 type="name"
                                 onChange={(e) => onInputChange('name', e)}
                             />
+                            {errors.name && <p className='error-msg'>{errors.name.message}</p>}
                         </FormGroup>
                         <FormGroup>
                             <Label for="email">
@@ -82,11 +110,15 @@ const Signup = () => {
                             </Label>
                             <Input
                                 id="email"
+                                {...register('email', signUpValidations.email)}
+                                className={classNames(`form-control ${errors.email ? 'is-invalid' : ''}`)}
+                                aria-invalid={errors.name ? "true" : "false"}
                                 name="email"
                                 placeholder="Enter your email"
                                 type="email"
                                 onChange={(e) => onInputChange('email', e)}
                             />
+                            {errors.email && <p className='error-msg'>{errors.email.message}</p>}
                         </FormGroup>
                         <FormGroup>
                             <Label for="phone">
@@ -94,11 +126,15 @@ const Signup = () => {
                             </Label>
                             <Input
                                 id="phone"
+                                {...register('phone', signUpValidations.phone)}
+                                className={classNames(`form-control ${errors.phone ? 'is-invalid' : ''}`)}
+                                aria-invalid={errors.phone ? "true" : "false"}
                                 name="phone"
                                 placeholder="Enter your phone number"
                                 type="number"
                                 onChange={(e) => onInputChange('phone', e)}
                             />
+                            {errors.phone && <p className='error-msg'>{errors.phone.message}</p>}
                         </FormGroup>
                         <FormGroup>
                             <Label for="password">
@@ -106,11 +142,15 @@ const Signup = () => {
                             </Label>
                             <Input
                                 id="password"
+                                {...register('password', signUpValidations.password)}
+                                className={classNames(`form-control ${errors.password ? 'is-invalid' : ''}`)}
+                                aria-invalid={errors.password ? "true" : "false"}
                                 name="password"
                                 placeholder="Enter your password"
                                 type="password"
                                 onChange={(e) => onInputChange('password', e)}
                             />
+                            {errors.password && <p className='error-msg'>{errors.password.message}</p>}
                         </FormGroup>
                         <FormGroup>
                             <Label for="work">
@@ -118,11 +158,15 @@ const Signup = () => {
                             </Label>
                             <Input
                                 id="work"
+                                {...register('work', signUpValidations.work)}
+                                className={classNames(`form-control ${errors.work ? 'is-invalid' : ''}`)}
+                                aria-invalid={errors.work ? "true" : "false"}
                                 name="work"
                                 placeholder="Your designation"
                                 type="work"
                                 onChange={(e) => onInputChange('work', e)}
                             />
+                            {errors.work && <p className='error-msg'>{errors.work.message}</p>}
                         </FormGroup>
                         <FormGroup row>
                             <Label
@@ -133,18 +177,25 @@ const Signup = () => {
                             <Col>
                                 <Input
                                     id="about"
+                                    {...register('about', signUpValidations.about)}
+                                    className={classNames(`form-control ${errors.about ? 'is-invalid' : ''}`)}
+                                    aria-invalid={errors.about ? "true" : "false"}
                                     name="about"
                                     type="textarea"
                                     onChange={(e) => onInputChange('about', e)}
                                 />
+                                {errors.about && <p className='error-msg'>{errors.about.message}</p>}
                             </Col>
                         </FormGroup>
                         <FormGroup check>
                             <Input type="checkbox"
                                 id='enabled'
+                                {...register('enabled', signUpValidations.enabled)}
+                                className={classNames(`form-control ${errors.enabled ? 'is-invalid' : ''}`)}
                                 name='enabled'
                                 onChange={(e) => onInputChange('enabled', e)}
                             />
+                            {errors.enabled && <p className='error-msg'>{errors.enabled.message}</p>}
                             {' '}
                             <Label check>
                                 Agreed to Terms & Conditions

@@ -53,9 +53,8 @@ code {
   color: aliceblue;
 }
 
-.nav-item {
-  color: aliceblue;
-  margin-right: 10px;
+.nav-link {
+  color: aliceblue !important;
 }
 
 .imageRow img{
@@ -73,4 +72,8 @@ code {
 
 .ps-menu-label svg {
   margin-bottom: 4px;
+}
+
+.error-msg {
+  color: red;
 }

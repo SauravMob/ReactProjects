@@ -3,6 +3,7 @@ import { Button, Card, CardBody, Row } from 'reactstrap'
 import contactImage from '../assets/logo512.png'
 
 const Dashboard = () => {
+  console.log("LOCAL:", localStorage.getItem('userId'))
   return (
     <div>
       <Card>

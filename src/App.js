@@ -6,6 +6,7 @@ import Navbar from './components/commons/Navbar';
 import UserComponent from './UserComponent';
 import { useEffect, useState } from 'react';
 import Home from './components/commons/Home';
+import NotFound from './components/commons/NotFound';
 
 function App() {
   const loc = useLocation()
@@ -26,7 +27,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/logout" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   )

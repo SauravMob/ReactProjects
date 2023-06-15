@@ -46,6 +46,7 @@ const Login = () => {
                 show: true,
                 message: "Logged Out Successfully!!"
             })
+            localStorage.removeItem('userId')
         }
     }, [])
 

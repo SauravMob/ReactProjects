@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Card, CardBody, CardHeader } from 'reactstrap'
-import { showContacts } from './store/action'
+import { Button, Card, CardBody, CardHeader } from 'reactstrap'
+import { getContact, showContacts } from './store/action'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { useNavigate } from 'react-router-dom';
@@ -14,17 +14,28 @@ const ViewContacts = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-      if (localStorage.getItem('userId') === null) {
-        setTimeout(() => {
-          navigate('/login')
-        }, 1000)
-      }
+        if (localStorage.getItem('userId') === null) {
+            setTimeout(() => {
+                navigate('/login')
+            }, 1000)
+        }
     }, [])
+
+    const handleUpdate = (row) => {
+        setTimeout(() => {
+            navigate(`/user/edit-contact/${row.cid}`)
+        }, 1000)
+    }
+    
+    const handleDelete = (row) => {
+        console.log("Delete:", row)
+    }
 
     const column = [
         {
             field: 'cid',
-            header: 'CID'
+            header: 'CID',
+            sortable: true
         },
         {
             field: 'name',
@@ -41,6 +52,16 @@ const ViewContacts = () => {
         {
             field: 'about',
             header: 'About'
+        },
+        {
+            field: 'action',
+            header: 'Action',
+            body: (rowData) => (
+                <>
+                    <Button onClick={() => handleUpdate(rowData)}>Update</Button>
+                    <Button className='ms-2' onClick={() => handleDelete(rowData)}>Delete</Button>
+                </>
+            )
         }
     ]
 
@@ -71,7 +92,7 @@ const ViewContacts = () => {
                         rows={5}
                         rowsPerPageOptions={rowsPerPage}>
                         {column.map((col, i) => (
-                            <Column key={col.field} field={col.field} header={col.header} />
+                            <Column sortable={col.sortable} key={col.field} field={col.field} header={col.header} body={col.body} />
                         ))}
                     </DataTable>
                 </CardBody>

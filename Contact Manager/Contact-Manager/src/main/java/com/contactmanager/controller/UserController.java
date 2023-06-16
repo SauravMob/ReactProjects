@@ -68,6 +68,27 @@ public class UserController {
         }
     }
 
+    @PutMapping("/user/edit-contact/{id}")
+    public ResponseEntity<Contacts> editContact(@PathVariable("id") Integer id, @RequestBody Contacts contacts) {
+        Contacts contacts1 = this.contactRepository.findContactsById(id);
+        contacts1.setName(contacts.getName());
+        contacts1.setEmail(contacts.getEmail());
+        contacts1.setPhone(contacts.getPhone());
+        contacts1.setWork(contacts.getWork());
+        contacts1.setAbout(contacts.getAbout());
+        String username = (String) this.session.getAttribute("username");
+        User user1 = this.userRepository.findByEmail(username);
+        contacts1.setUser(user1);
+        this.contactRepository.save(contacts1);
+        return ResponseEntity.ok(contacts1);
+    }
+
+    @GetMapping("/user/get-contact/{id}")
+    public ResponseEntity<Contacts> getContact(@PathVariable("id") Integer id) {
+        Contacts contacts1 = this.contactRepository.findContactsById(id);
+        return ResponseEntity.ok(contacts1);
+    }
+
     @GetMapping("/user/show-contacts/{page}")
     public ResponseEntity<Page<Contacts>> showContacts(@PathVariable("page") Integer page) {
         String username = (String) this.session.getAttribute("username");

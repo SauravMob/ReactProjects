@@ -15,7 +15,8 @@ const UserComponent = () => {
             <div className='content'>
                 <Routes>
                     <Route path="/user/dashboard" element={<Dashboard />} />
-                    <Route path="/user/add-contacts" element={<AddContact />} />
+                    <Route exact path="/user/edit-contact/:id" element={<AddContact />} />
+                    <Route exact path="/user/add-contacts" element={<AddContact />} />
                     <Route path="/user/show-contacts" element={<ViewContacts />} />
                     <Route path="/user/profile" element={<Profile />} />
                 </Routes>

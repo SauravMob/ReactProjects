@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Alert, Button, Card, CardBody, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap'
-import { addContact } from './store/action'
+import { addContact, editContact, getContact } from './store/action'
 import classNames from 'classnames'
 import { useForm } from 'react-hook-form'
 import { regexEmail, regexPhone } from '../utility/Utils'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const AddContact = () => {
 
   const dispatch = useDispatch()
   const store = useSelector(state => state.userReducer)
   const navigate = useNavigate()
-  const [alert, setAlert] = useState(false)
+  const [alert, setAlert] = useState({
+    show: false,
+    message: ''
+  })
+  const { id } = useParams()
+  const isEdit = !!id
 
   useEffect(() => {
     if (localStorage.getItem('userId') === null) {
@@ -40,6 +45,29 @@ const AddContact = () => {
     }
   })
 
+  useEffect(() => {
+    if (isEdit) {
+      dispatch(getContact(id))
+    }
+  }, [id])
+
+  useEffect(() => {
+    if (isEdit) {
+      setInput({
+        "name": store.contacts.name,
+        "email": store.contacts.email,
+        "phone": store.contacts.phone,
+        "work": store.contacts.work,
+        "about": store.contacts.about
+      })
+      setValue('name', store.contacts.name)
+      setValue('email', store.contacts.email)
+      setValue('phone', store.contacts.phone)
+      setValue('work', store.contacts.work)
+      setValue('about', store.contacts.about)
+    }
+  }, [store.contacts])
+
   const signUpValidations = {
     "name": { required: "Required Field" },
     "email": { required: "Required field", pattern: { value: regexEmail, message: 'Invalid email id' } },
@@ -57,11 +85,26 @@ const AddContact = () => {
   }
 
   const onSubmit = (data) => {
-    setAlert(true)
-    dispatch(addContact(data))
-    setTimeout(() => {
-      navigate('/user/show-contacts')
-    }, 5000)
+    if (isEdit) {
+      setAlert({
+        show: true,
+        message: 'Contact Updated Successfully!!'
+      })
+      dispatch(editContact(id, data))
+      setTimeout(() => {
+        navigate('/user/show-contacts')
+      }, 5000)
+      
+    } else {
+      setAlert({
+        show: true,
+        message: 'Contact Created Successfully!!'
+      })
+      dispatch(addContact(data))
+      setTimeout(() => {
+        navigate('/user/show-contacts')
+      }, 5000)
+    }
   }
 
   return (
@@ -70,8 +113,8 @@ const AddContact = () => {
         <CardBody className='text-white px-4'>
           <Row>
             <h4 className='d-flex justify-content-center'>Enter Contact Details </h4>
-            {alert && <>
-              <Alert severity="error" className='text-center alert alert-success'>Contact Added Successfully</Alert>
+            {alert.show && <>
+              <Alert severity="error" className='text-center alert alert-success'>{alert.message}</Alert>
             </>}
             <Form onSubmit={handleSubmit(onSubmit)}>
               <FormGroup>
@@ -86,6 +129,7 @@ const AddContact = () => {
                   name="name"
                   placeholder="Enter contact name"
                   type="text"
+                  value={input.name || ''}
                   onChange={(e) => onInputChange('name', e)}
                 />
                 {errors.name && <p className='error-msg'>{errors.name.message}</p>}
@@ -102,6 +146,7 @@ const AddContact = () => {
                   name="phone"
                   placeholder="Enter contact number"
                   type="number"
+                  value={input.phone || ''}
                   onChange={(e) => onInputChange('phone', e)}
                 />
                 {errors.phone && <p className='error-msg'>{errors.phone.message}</p>}
@@ -118,6 +163,7 @@ const AddContact = () => {
                   name="email"
                   placeholder="Enter contact email"
                   type="email"
+                  value={input.email || ''}
                   onChange={(e) => onInputChange('email', e)}
                 />
                 {errors.email && <p className='error-msg'>{errors.email.message}</p>}
@@ -134,6 +180,7 @@ const AddContact = () => {
                   name="work"
                   placeholder="Enter Contact Work Details"
                   type="text"
+                  value={input.work || ''}
                   onChange={(e) => onInputChange('work', e)}
                 />
                 {errors.work && <p className='error-msg'>{errors.work.message}</p>}
@@ -153,6 +200,7 @@ const AddContact = () => {
                     name="about"
                     type="textarea"
                     placeholder='Write something about Contact'
+                    value={input.about || ''}
                     onChange={(e) => onInputChange('about', e)}
                   />
                 </Col>

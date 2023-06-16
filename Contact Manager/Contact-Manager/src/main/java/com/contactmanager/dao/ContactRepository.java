@@ -12,4 +12,7 @@ public interface ContactRepository extends JpaRepository<Contacts, Integer> {
 
     @Query("from Contacts as c where c.user.id =:userId")
     Page<Contacts> findContactsByUser(int userId, Pageable pageable);
+
+    @Query("from Contacts as c where c.cid =:id")
+    Contacts findContactsById(int id);
 }

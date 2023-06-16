@@ -56,9 +56,42 @@ export const getProfile = () => {
     return async dispatch => {
         await httpRequestApi('GET', uri)
         .then(response => {
-            console.log("Rsponse:", response)
             dispatch({
                 type: 'USER_PROFILE',
+                data: response.data,
+                status: response.status
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+}
+
+export const getContact = (id) => {
+    const uri = `user/get-contact/${id}`
+    return async dispatch => {
+        await httpRequestApi('GET', uri)
+        .then(response => {
+            dispatch({
+                type: 'GET_CONTACT',
+                data: response.data,
+                status: response.status
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+}
+
+export const editContact = (id, data) => {
+    const uri = `user/edit-contact/${id}`
+    return async dispatch => {
+        await httpRequestApi('PUT', uri, data)
+        .then(response => {
+            dispatch({
+                type: 'EDIT_CONTACT',
                 data: response.data,
                 status: response.status
             })

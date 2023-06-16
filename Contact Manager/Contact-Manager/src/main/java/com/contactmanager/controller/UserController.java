@@ -80,7 +80,8 @@ public class UserController {
     @GetMapping("/user/dashboard")
     public ResponseEntity<String> dashboard() {
         String username = (String) this.session.getAttribute("username");
-        return new ResponseEntity<>(username, HttpStatus.ACCEPTED);
+        User user1 = this.userRepository.findByEmail(username);
+        return new ResponseEntity<>(user1.getName(), HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/logout")

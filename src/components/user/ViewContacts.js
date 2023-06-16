@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Card, CardBody, CardHeader } from 'reactstrap'
+import { Card, CardBody, CardHeader } from 'reactstrap'
 import { showContacts } from './store/action'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import ReactPaginate from 'react-paginate'
 import { useNavigate } from 'react-router-dom';
 
 const ViewContacts = () => {
 
     const dispatch = useDispatch()
     const store = useSelector(state => state.userReducer)
-    const [currentPage, setCurrentPage] = useState(0)
     const rowsPerPage = 10
     const navigate = useNavigate()
 
@@ -56,36 +54,6 @@ const ViewContacts = () => {
         } else {
             return []
         }
-    }
-
-    // ** Function to handle Pagination
-    const handlePagination = page => {
-        setCurrentPage(page.selected + 1)
-    }
-
-
-    const CustomPagination = () => {
-        const count = Number(Math.ceil(store.total / rowsPerPage))
-        return (<ReactPaginate
-            previousLabel={'Previous'}
-            nextLabel={'Next'}
-            forcePage={currentPage !== 0 ? currentPage - 1 : 0}
-            onPageChange={page => handlePagination(page)}
-            pageCount={count || 1}
-            breakLabel={'...'}
-            pageRangeDisplayed={2}
-            marginPagesDisplayed={2}
-            activeClassName={'active'}
-            pageClassName={'page-item'}
-            nextLinkClassName={'page-link'}
-            nextClassName={'page-item next'}
-            previousClassName={'page-item prev'}
-            previousLinkClassName={'page-link'}
-            pageLinkClassName={'page-link'}
-            breakClassName='page-item'
-            breakLinkClassName='page-link'
-            containerClassName={'pagination react-paginate separated-pagination pagination-sm justify-content-end pr-1 mt-1'}
-        />)
     }
 
     return (

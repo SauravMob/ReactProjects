@@ -50,7 +50,7 @@ const Signup = () => {
         "password": { required: "Required field", minLength: { value: 3, message: "Password must be atleat 3 character" } },
         "work": { required: "Required Field" },
         "about": { required: "Required Field" },
-        "enabled": { required: "Required Field", pattern: { value: 'on', message: "Please Check the terms and conditions" } },
+        "enabled": { required: "Required Field", pattern: { value: 'on', message: "Please Check the terms and conditions" } }
     }
 
     const onInputChange = (selector, e) => {

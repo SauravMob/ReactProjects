@@ -1,5 +1,6 @@
 package com.contactmanager.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -21,6 +22,7 @@ public class Contacts {
     private String about;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
     private User user;
 
     public int getCid() {
@@ -79,13 +81,7 @@ public class Contacts {
         this.user = user;
     }
 
-    public Contacts(int cid, String name, String email, String phone, String work, String about, User user) {
-        this.cid = cid;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.work = work;
-        this.about = about;
-        this.user = user;
+    public Contacts() {
+        super();
     }
 }

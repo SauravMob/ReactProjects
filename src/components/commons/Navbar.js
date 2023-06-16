@@ -26,9 +26,8 @@ const Navbars = (args) => {
                 <NavbarBrand href="/">Contact Manager</NavbarBrand>
                 <Nav navbar>
                     {userToggle ? <>
-                        <NavLink href='/about'>About</NavLink>
-                        <NavLink href='/logout'>Logout</NavLink>
                         <NavLink>{localStorage.getItem('userId')}</NavLink>
+                        <NavLink href='/logout'>Logout</NavLink>
                     </> : <>
                         {loc.pathname === '/' ? <>
                             <NavLink href='/login'>Login</NavLink>

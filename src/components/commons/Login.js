@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Alert, Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginUser } from './store/action'
+import { loginUser, logoutUser } from './store/action'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { regexEmail } from '../utility/Utils'
 import classNames from 'classnames'
@@ -42,6 +42,7 @@ const Login = () => {
 
     useEffect(() => {
         if (loc.pathname === '/logout') {
+            dispatch(logoutUser())
             setAlert({
                 show: true,
                 message: "Logged Out Successfully!!"

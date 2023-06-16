@@ -7,16 +7,24 @@ import com.contactmanager.entities.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @CrossOrigin("http://localhost:3001/")
 @Controller
 public class UserController {
 
-    HttpServletRequest request;
+    @Autowired
+    private HttpSession session;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -35,11 +43,11 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody User user) {
+    public ResponseEntity<String> loginUser(@RequestBody User user, HttpServletRequest request) {
         User user1 = userRepository.findByEmailAndPassword(user.getEmail(), user.getPassword());
         if (user1 != null) {
-            HttpSession session = request.getSession();
-            session.setAttribute("username", user.getEmail());
+            this.session = request.getSession();
+            this.session.setAttribute("username", user.getEmail());
             return ResponseEntity.ok(user.getEmail());
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User does not exist");
@@ -47,13 +55,43 @@ public class UserController {
     }
 
     @PostMapping("/user/add-contacts")
-    public void addContact(@RequestBody Contacts contacts) {
-        HttpSession session = request.getSession();
-        String username = (String) session.getAttribute("username");
-        System.out.println("USERNAME:" + username);
-//        User user1 = this.userRepository.findByEmail(username);
-//        contacts.setUser(user1);
-//        this.userRepository.save(user1);
-//        return ResponseEntity.ok(user1);
+    public ResponseEntity<String> addContact(@RequestBody Contacts contacts) {
+        String username = (String) this.session.getAttribute("username");
+        User user1 = this.userRepository.findByEmail(username);
+        if (user1 != null) {
+            contacts.setUser(user1);
+            user1.getContacts().add(contacts);
+            this.userRepository.save(user1);
+            return ResponseEntity.ok(contacts.getName());
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User does not exist");
+        }
+    }
+
+    @GetMapping("/user/show-contacts/{page}")
+    public ResponseEntity<Page<Contacts>> showContacts(@PathVariable("page") Integer page) {
+        String username = (String) this.session.getAttribute("username");
+        Pageable pageable = PageRequest.of(page, 10);
+        User user1 = this.userRepository.findByEmail(username);
+        Page<Contacts> contacts = this.contactRepository.findContactsByUser(user1.getId(), pageable);
+        return ResponseEntity.ok(contacts);
+    }
+
+    @GetMapping("/user/dashboard")
+    public ResponseEntity<String> dashboard() {
+        String username = (String) this.session.getAttribute("username");
+        return new ResponseEntity<>(username, HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout() {
+        this.session.removeAttribute("username");
+        return ResponseEntity.ok("Logged out");
+    }
+    @GetMapping("/user/profile")
+    public ResponseEntity<User> profile() {
+        String username = (String) this.session.getAttribute("username");
+        User user1 = this.userRepository.findByEmail(username);
+        return new ResponseEntity<>(user1, HttpStatus.ACCEPTED);
     }
 }

@@ -1,36 +1,12 @@
 import { httpRequestApi } from "../../httpRequestApi"
 
-export const loginUser = (data) => {
-    const uri = 'login'
+export const addContact = (data) => {
+    const uri = 'user/add-contacts'
     return async dispatch => {
         await httpRequestApi('POST', uri, data)
         .then(response => {
-            localStorage.setItem('userId', response.data)
             dispatch({
-                type: 'LOGIN',
-                data: response.data,
-                status: response.status
-            })
-        })
-        .catch(error => {
-            console.log("Err", error)
-            dispatch({
-                type: 'LOGIN',
-                data: error.data,
-                status: error.status
-            })
-        })
-    }
-}
-
-export const registerUser = (data) => {
-    const uri = 'register'
-    return async dispatch => {
-        await httpRequestApi('POST', uri, data)
-        .then(response => {
-            console.log("response:", response)
-            dispatch({
-                type: 'REGISTER',
+                type: 'ADD_CONTACT',
                 data: response.data,
                 status: response.status
             })
@@ -41,13 +17,48 @@ export const registerUser = (data) => {
     }
 }
 
-export const logoutUser = () => {
-    const uri = 'logout'
+export const showContacts = () => {
+    const uri = 'user/show-contacts/0'
     return async dispatch => {
         await httpRequestApi('GET', uri)
         .then(response => {
             dispatch({
-                type: 'LOGOUT',
+                type: 'SHOW_CONTACTS',
+                data: response.data.content,
+                total: response.data.totalElements
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+}
+
+export const userDashboard = () => {
+    const uri = 'user/dashboard'
+    return async dispatch => {
+        await httpRequestApi('GET', uri)
+        .then(response => {
+            dispatch({
+                type: 'USER_DASHBOARD',
+                data: response.data,
+                status: response.status
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+}
+
+export const getProfile = () => {
+    const uri = 'user/profile'
+    return async dispatch => {
+        await httpRequestApi('GET', uri)
+        .then(response => {
+            console.log("Rsponse:", response)
+            dispatch({
+                type: 'USER_PROFILE',
                 data: response.data,
                 status: response.status
             })

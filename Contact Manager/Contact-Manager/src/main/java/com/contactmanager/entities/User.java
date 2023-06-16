@@ -1,5 +1,6 @@
 package com.contactmanager.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -21,21 +22,9 @@ public class User {
 
     private String role;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
+    @JsonManagedReference
     private List<Contacts> contacts = new ArrayList<>();
-
-    public User(int id, String name, String email, String phone, String password, String work, String about, boolean enabled, String role, List<Contacts> contacts) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.password = password;
-        this.work = work;
-        this.about = about;
-        this.enabled = enabled;
-        this.role = role;
-        this.contacts = contacts;
-    }
 
     public int getId() {
         return id;
@@ -119,5 +108,21 @@ public class User {
 
     public User() {
         super();
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", work='" + work + '\'' +
+                ", about='" + about + '\'' +
+                ", enabled=" + enabled +
+                ", role='" + role + '\'' +
+                ", contacts=" + contacts +
+                '}';
     }
 }

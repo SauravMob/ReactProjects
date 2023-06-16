@@ -3,6 +3,8 @@ import { Route, Routes } from 'react-router-dom'
 import Dashboard from './components/user/Dashboard'
 import Sidebars from './components/commons/Sidebar'
 import AddContact from './components/user/AddContact'
+import ViewContacts from './components/user/ViewContacts'
+import Profile from './components/user/Profile'
 
 const UserComponent = () => {
     return (
@@ -14,6 +16,8 @@ const UserComponent = () => {
                 <Routes>
                     <Route path="/user/dashboard" element={<Dashboard />} />
                     <Route path="/user/add-contacts" element={<AddContact />} />
+                    <Route path="/user/show-contacts" element={<ViewContacts />} />
+                    <Route path="/user/profile" element={<Profile />} />
                 </Routes>
             </div>
         </>

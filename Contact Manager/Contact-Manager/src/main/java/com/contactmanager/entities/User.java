@@ -2,6 +2,10 @@ package com.contactmanager.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,16 +17,24 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
+
+    @Email
+    @Column(unique = true)
     private String email;
+
+    @Column(unique = true)
+    @Pattern(regexp = "[0-9]{10}", message = "Phone number should be 10 digits")
     private String phone;
+
     private String password;
     private String work;
     private String about;
+
     private boolean enabled;
 
     private String role;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     @JsonManagedReference
     private List<Contacts> contacts = new ArrayList<>();
 

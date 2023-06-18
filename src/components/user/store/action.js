@@ -101,3 +101,20 @@ export const editContact = (id, data) => {
         })
     }
 }
+
+export const deleteContact = (id) => {
+    const uri = `user/delete-contact/${id}`
+    return async dispatch => {
+        await httpRequestApi('DELETE', uri)
+        .then(response => {
+            dispatch({
+                type: 'DELETE_CONTACT',
+                data: response.data,
+                status: response.status
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+}

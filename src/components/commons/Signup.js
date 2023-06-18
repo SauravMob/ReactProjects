@@ -47,7 +47,7 @@ const Signup = () => {
         "name": { required: "Required Field" },
         "email": { required: "Required field", pattern: { value: regexEmail, message: 'Invalid email id' } },
         "phone": { required: "Required field", pattern: { value: regexPhone, message: 'Invalid phone number' } },
-        "password": { required: "Required field", minLength: { value: 3, message: "Password must be atleat 3 character" } },
+        "password": { required: "Required field", minLength: { value: 6, message: "Password must be atleat 3 character" } },
         "work": { required: "Required Field" },
         "about": { required: "Required Field" },
         "enabled": { required: "Required Field", pattern: { value: 'on', message: "Please Check the terms and conditions" } }

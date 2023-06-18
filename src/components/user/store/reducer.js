@@ -19,6 +19,8 @@ export const userReducer = (state = initialState, action) => {
             return { ...state, contacts: action.data, total: action.total }
         case 'USER_DASHBOARD':
             return { ...state, data: action.data, status: action.status }
+        case 'DELETE_CONTACT':
+            return { ...state }
         case 'USER_PROFILE':
             return { ...state, user: action.data, status: action.status }
         default:

@@ -22,7 +22,7 @@ const Login = () => {
         if (store.status === 200) {
             setTimeout(() => {
                 navigate('/user/dashboard')
-            }, 2000);
+            }, 1000);
         } else if (store.data === 'User does not exist') {
             setAlert({
                 show: true,
@@ -77,7 +77,7 @@ const Login = () => {
 
     const loginValidation = {
         email: { required: "Required field", pattern: { value: regexEmail, message: 'Invalid email id' } },
-        password: { required: "Required field", minLength: { value: 3, message: "Password must be atleat 3 character" } }
+        password: { required: "Required field", minLength: { value: 6, message: "Password must be atleat 3 character" } }
     }
 
     return (

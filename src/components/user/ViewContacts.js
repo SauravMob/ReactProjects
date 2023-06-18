@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Card, CardBody, CardHeader } from 'reactstrap'
-import { getContact, showContacts } from './store/action'
+import { deleteContact, showContacts } from './store/action'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { useNavigate } from 'react-router-dom';
@@ -28,7 +28,10 @@ const ViewContacts = () => {
     }
     
     const handleDelete = (row) => {
-        console.log("Delete:", row)
+        dispatch(deleteContact(row.cid))
+        setTimeout(() => {
+            dispatch(showContacts())
+        }, 1000)
     }
 
     const column = [

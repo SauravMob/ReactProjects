@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +23,12 @@ import java.util.List;
 @Controller
 public class UserController {
 
+//    All the autowiring components
     @Autowired
     private HttpSession session;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private UserRepository userRepository;
@@ -31,6 +36,7 @@ public class UserController {
     @Autowired
     private ContactRepository contactRepository;
 
+//    All the commons method
     @GetMapping("/home")
     public ResponseEntity home() {
         return ResponseEntity.ok("Home");
@@ -39,19 +45,43 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         user.setRole("USER");
-        User user1 = userRepository.save(user);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        this.userRepository.save(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
+
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody User user, HttpServletRequest request) {
-        User user1 = userRepository.findByEmailAndPassword(user.getEmail(), user.getPassword());
-        if (user1 != null) {
+        User user1 = userRepository.findByEmail(user.getEmail());
+        boolean matches = bCryptPasswordEncoder.matches(user.getPassword(), user1.getPassword());
+        if (matches) {
             this.session = request.getSession();
             this.session.setAttribute("username", user.getEmail());
             return ResponseEntity.ok(user.getEmail());
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User does not exist");
         }
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout() {
+        this.session.removeAttribute("username");
+        return ResponseEntity.ok("Logged out");
+    }
+
+//    All the User Methods
+    @GetMapping("/user/dashboard")
+    public ResponseEntity<String> dashboard() {
+        String username = (String) this.session.getAttribute("username");
+        User user1 = this.userRepository.findByEmail(username);
+        return new ResponseEntity<>(user1.getName(), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/user/profile")
+    public ResponseEntity<User> profile() {
+        String username = (String) this.session.getAttribute("username");
+        User user1 = this.userRepository.findByEmail(username);
+        return new ResponseEntity<>(user1, HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/user/add-contacts")
@@ -98,22 +128,16 @@ public class UserController {
         return ResponseEntity.ok(contacts);
     }
 
-    @GetMapping("/user/dashboard")
-    public ResponseEntity<String> dashboard() {
+    @DeleteMapping("/user/delete-contact/{id}")
+    public ResponseEntity<String> deleteContact(@PathVariable("id") Integer id) {
+        Contacts contacts = this.contactRepository.findContactsById(id);
         String username = (String) this.session.getAttribute("username");
         User user1 = this.userRepository.findByEmail(username);
-        return new ResponseEntity<>(user1.getName(), HttpStatus.ACCEPTED);
-    }
-
-    @GetMapping("/logout")
-    public ResponseEntity<String> logout() {
-        this.session.removeAttribute("username");
-        return ResponseEntity.ok("Logged out");
-    }
-    @GetMapping("/user/profile")
-    public ResponseEntity<User> profile() {
-        String username = (String) this.session.getAttribute("username");
-        User user1 = this.userRepository.findByEmail(username);
-        return new ResponseEntity<>(user1, HttpStatus.ACCEPTED);
+        user1.getContacts().remove(contacts);
+        this.userRepository.save(user1);
+        this.contactRepository.delete(contacts);
+        System.out.println("Contacts:" + contacts);
+        System.out.println("USER:" + user1);
+        return ResponseEntity.ok("Deleted");
     }
 }

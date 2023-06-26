@@ -20,10 +20,8 @@ const AddContact = () => {
   const isEdit = !!id
 
   useEffect(() => {
-    if (localStorage.getItem('userId') === null) {
-      setTimeout(() => {
-        navigate('/login')
-      }, 1000)
+    if (localStorage.getItem("userToken") === null) {
+      navigate("/login")      
     }
   }, [])
 

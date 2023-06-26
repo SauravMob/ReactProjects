@@ -13,19 +13,17 @@ const ViewContacts = () => {
     const rowsPerPage = 10
     const navigate = useNavigate()
 
-    useEffect(() => {
-        if (localStorage.getItem('userId') === null) {
-            setTimeout(() => {
-                navigate('/login')
-            }, 1000)
-        }
-    }, [])
-
     const handleUpdate = (row) => {
         setTimeout(() => {
             navigate(`/user/edit-contact/${row.cid}`)
         }, 1000)
     }
+
+    useEffect(() => {
+        if (localStorage.getItem("userToken") === null) {
+          navigate("/login")      
+        }
+      }, [])
     
     const handleDelete = (row) => {
         dispatch(deleteContact(row.cid))

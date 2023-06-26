@@ -1,7 +1,7 @@
 import { httpRequestApi } from "../../httpRequestApi"
 
 export const addContact = (data) => {
-    const uri = 'user/add-contacts'
+    const uri = 'user/add-contact'
     return async dispatch => {
         await httpRequestApi('POST', uri, data)
         .then(response => {
@@ -39,6 +39,7 @@ export const userDashboard = () => {
     return async dispatch => {
         await httpRequestApi('GET', uri)
         .then(response => {
+            localStorage.setItem("userId", response.data) 
             dispatch({
                 type: 'USER_DASHBOARD',
                 data: response.data,

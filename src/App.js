@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import Login from './components/commons/Login';
 import Signup from './components/commons/Signup';
@@ -29,7 +29,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        {/* <Route path="*" element={<NotFound />} /> */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   )

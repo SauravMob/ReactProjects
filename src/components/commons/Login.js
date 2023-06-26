@@ -23,7 +23,7 @@ const Login = () => {
             setTimeout(() => {
                 navigate('/user/dashboard')
             }, 1000);
-        } else if (store.data === 'User does not exist') {
+        } else if (store.status === 401) {
             setAlert({
                 show: true,
                 message: 'Invalid Credentials!!'
@@ -48,6 +48,7 @@ const Login = () => {
                 message: "Logged Out Successfully!!"
             })
             localStorage.removeItem('userId')
+            localStorage.removeItem('userToken')
         }
     }, [])
 
@@ -77,7 +78,7 @@ const Login = () => {
 
     const loginValidation = {
         email: { required: "Required field", pattern: { value: regexEmail, message: 'Invalid email id' } },
-        password: { required: "Required field", minLength: { value: 6, message: "Password must be atleat 3 character" } }
+        password: { required: "Required field", minLength: { value: 4, message: "Password must be atleat 4 character" } }
     }
 
     return (

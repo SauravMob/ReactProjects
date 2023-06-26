@@ -12,16 +12,14 @@ const Profile = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-      if (localStorage.getItem('userId') === null) {
-        setTimeout(() => {
-          navigate('/login')
-        }, 1000)
-      }
+        dispatch(getProfile())
     }, [])
 
     useEffect(() => {
-        dispatch(getProfile())
-    }, [])
+        if (localStorage.getItem("userToken") === null) {
+          navigate("/login")      
+        }
+      }, [])
 
     return (
         <div>

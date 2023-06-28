@@ -32,6 +32,12 @@ const Login = () => {
     }, [store])
 
     useEffect(() => {
+        if (localStorage.getItem("userToken") !== null) {
+            navigate("/user/dashboard")
+        }
+    }, [localStorage.getItem("userToken")])
+
+    useEffect(() => {
         setTimeout(() => {
             setAlert({
                 show: false,

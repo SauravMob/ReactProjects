@@ -6,6 +6,8 @@ import { loginUser, logoutUser } from './store/action'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { regexEmail } from '../utility/Utils'
 import classNames from 'classnames'
+import { LoginSocialFacebook } from 'reactjs-social-login'
+import { FacebookLoginButton } from 'react-social-login-buttons'
 
 const Login = () => {
 
@@ -17,6 +19,7 @@ const Login = () => {
         show: false,
         message: ''
     })
+    const [profile, setProfile] = useState(null)
 
     useEffect(() => {
         if (store.status === 200) {
@@ -145,6 +148,23 @@ const Login = () => {
                             </Button>
                         </FormGroup>
                     </Form>
+
+                    <div>
+                        {!profile ?
+                            <LoginSocialFacebook
+                                appId='790732522590947'
+                                onResolve={(response) => setProfile(response.data)}
+                                onReject={(error) => console.log("ERROR:", error)}
+                            >
+                                <FacebookLoginButton />
+                            </LoginSocialFacebook> : ''}
+
+                        {profile ? <>
+                            <h3>{profile.name}</h3>
+                            <img src={profile.picture.data.url} />
+                        </> : <>
+                        </>}
+                    </div>
                 </Row>
             </Col>
             <Col></Col>
